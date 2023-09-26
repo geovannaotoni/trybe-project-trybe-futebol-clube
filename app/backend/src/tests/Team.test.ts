@@ -24,4 +24,13 @@ describe('#Teams', () => {
     expect(status).to.equal(200);
     expect(body).to.deep.equal(teams);
   });
+
+  it('A requisição para a rota GET /teams/:id retorna o time com id correto', async function() {
+    sinon.stub(SequelizeTeam, 'findByPk').resolves(SequelizeTeam.build(teams[0]));
+
+    const { status, body } = await chai.request(app).get('/teams/1');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(teams[0]);
+  });
 });
