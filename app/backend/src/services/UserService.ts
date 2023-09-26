@@ -18,7 +18,7 @@ export default class UserService {
       return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
     }
 
-    const token = this.jwtService.sign({ email: user.email });
+    const token = this.jwtService.sign({ email: user.email, role: user.role });
     return { status: 'SUCCESSFUL', data: { token } };
   }
 }

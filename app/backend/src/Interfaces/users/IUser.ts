@@ -5,3 +5,8 @@ export interface IUser {
   email: string;
   password: string;
 }
+
+export interface IPayload {
+  email: string;
+  role: string;
+}

@@ -56,12 +56,21 @@ describe('#Login', () => {
     expect(body).to.deep.equal({ message: 'Invalid email or password' });
   });
 
-  it('A requisição para a rota GET /login/role retorna o role do usuário', async function() {
+  it('A requisição para a rota GET /login/role retorna o role do usuário se receber um token válido', async function() {
     sinon.stub(JWT, 'verify').returns(jwtPayload);
 
-    const { status, body } = await chai.request(app).get('/login/role').set('Authorization', 'genericToken');
+    const { status, body } = await chai.request(app).get('/login/role').set('Authorization', 'validToken');
 
     expect(status).to.equal(200);
     expect(body).to.deep.equal({ role: jwtPayload.role });
+  });
+
+  it('A requisição para a rota GET /login/role retorna uma mensagem de erro se receber um token inválido', async function() {
+    sinon.stub(JWT, 'verify').returns('Token must be a valid token');
+
+    const { status, body } = await chai.request(app).get('/login/role').set('Authorization', 'invalidToken');
+
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Token must be a valid token' });
   });
 });
