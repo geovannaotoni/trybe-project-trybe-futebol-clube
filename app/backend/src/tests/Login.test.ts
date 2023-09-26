@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 
-import { invalidEmailLoginBody, invalidPasswordLoginBody, registeredUser, validLoginBody } from './mocks/User.mock';
+import { invalidEmailLoginBody, invalidPasswordLoginBody, jwtPayload, registeredUser, validLoginBody } from './mocks/User.mock';
 import SequelizeUser from '../database/models/SequelizeUser';
 import JWT from '../utils/JWT';
 
@@ -54,5 +54,14 @@ describe('#Login', () => {
 
     expect(status).to.equal(401);
     expect(body).to.deep.equal({ message: 'Invalid email or password' });
+  });
+
+  it('A requisição para a rota GET /login/role retorna o role do usuário', async function() {
+    sinon.stub(JWT, 'verify').returns(jwtPayload);
+
+    const { status, body } = await chai.request(app).get('/login/role').set('Authorization', 'genericToken');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal({ role: jwtPayload.role });
   });
 });
