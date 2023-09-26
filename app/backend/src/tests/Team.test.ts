@@ -33,4 +33,13 @@ describe('#Teams', () => {
     expect(status).to.equal(200);
     expect(body).to.deep.equal(teams[0]);
   });
+
+  it('A requisição para a rota GET /teams/:id retorna uma mensagem de erro se não encontrar o time', async function() {
+    sinon.stub(SequelizeTeam, 'findByPk').resolves(null);
+
+    const { status, body } = await chai.request(app).get('/teams/9999');
+
+    expect(status).to.equal(404);
+    expect(body).to.deep.equal({ message: 'Team 9999 not found' });
+  });
 });
