@@ -15,13 +15,30 @@ const { expect } = chai;
 describe('#Match', () => {
   afterEach(sinon.restore);
 
-  it.only('A requisição para a rota GET /matches retorna a lista de partidas', async function() {
+  it('A requisição para a rota GET /matches retorna a lista de partidas', async function() {
     sinon.stub(SequelizeMatch, 'findAll').resolves(SequelizeMatch.bulkBuild(matchMock.matches));
 
     const { status, body } = await chai.request(app).get('/matches');
 
     expect(status).to.equal(200);
-    console.log(body);
     expect(body).to.deep.equal(matchMock.matches);
+  });
+
+  it('A requisição para a rota GET /matches?inProgress=true retorna a lista de partidas em andamento', async function() {
+    sinon.stub(SequelizeMatch, 'findAll').resolves(SequelizeMatch.bulkBuild(matchMock.matchesInProgress));
+
+    const { status, body } = await chai.request(app).get('/matches?inProgress=true');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(matchMock.matchesInProgress);
+  });
+
+  it('A requisição para a rota GET /matches?inProgress=false retorna a lista de partidas finalizadas', async function() {
+    sinon.stub(SequelizeMatch, 'findAll').resolves(SequelizeMatch.bulkBuild(matchMock.finishedMatches));
+
+    const { status, body } = await chai.request(app).get('/matches?inProgress=false');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(matchMock.finishedMatches);
   });
 });
