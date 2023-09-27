@@ -14,4 +14,15 @@ export default class MatchModel implements IMatchModel {
     });
     return dbData.map((match) => match.toJSON());
   }
+
+  public async findAllByProgress(inProgress: boolean): Promise<IMatch[]> {
+    const dbData = await this.model.findAll({
+      where: { inProgress },
+      include: [
+        { model: SequelizeTeam, as: 'homeTeam', attributes: ['teamName'] },
+        { model: SequelizeTeam, as: 'awayTeam', attributes: ['teamName'] },
+      ],
+    });
+    return dbData.map((match) => match.toJSON());
+  }
 }
