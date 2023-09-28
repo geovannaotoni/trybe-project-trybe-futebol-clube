@@ -21,4 +21,11 @@ router.patch(
   (req: Request, res: Response) => matchesController.updateGoalsMatch(req, res),
 );
 
+router.post(
+  '/',
+  Validations.validateToken,
+  Validations.validateNewMatch,
+  (req: Request, res: Response) => matchesController.createMatch(req, res),
+);
+
 export default router;

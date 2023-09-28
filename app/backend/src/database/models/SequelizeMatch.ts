@@ -61,6 +61,7 @@ SequelizeMatch.init({
     type: DataTypes.BOOLEAN,
     allowNull: false,
     field: 'in_progress',
+    defaultValue: true,
   },
 }, {
   sequelize: db,

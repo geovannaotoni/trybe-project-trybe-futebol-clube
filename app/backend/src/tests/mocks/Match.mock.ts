@@ -81,6 +81,13 @@ const invalidMatchToCreate = {
   "homeTeamGoals": 2,
 }
 
+const sameTeamsMatchToCreate = {
+  "homeTeamId": 8, 
+  "awayTeamId": 8, 
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2
+}
+
 const createdMatch = {
   "id": 1,
   "homeTeamId": 16,
@@ -98,4 +105,5 @@ export default {
   matchToCreate,
   createdMatch,
   invalidMatchToCreate,
+  sameTeamsMatchToCreate,
 }

@@ -42,4 +42,9 @@ export default class MatchModel implements IMatchModel {
     );
     return updatedMatch;
   }
+
+  public async create(match: Omit<IMatch, 'id'>): Promise<IMatch> {
+    const newMatch = await this.model.create(match);
+    return newMatch.toJSON();
+  }
 }

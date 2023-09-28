@@ -46,6 +46,17 @@ class Validations {
 
     next();
   }
+
+  static validateNewMatch(req: Request, res: Response, next: NextFunction): Response | void {
+    const newMatch = req.body;
+    const requiredKeys = ['homeTeamId', 'awayTeamId', 'homeTeamGoals', 'awayTeamGoals'];
+    const notFoundKey = requiredKeys.find((key) => !(key in newMatch));
+    if (notFoundKey) {
+      return res.status(400).json({ message: `${notFoundKey} is required` });
+    }
+
+    next();
+  }
 }
 
 export default Validations;

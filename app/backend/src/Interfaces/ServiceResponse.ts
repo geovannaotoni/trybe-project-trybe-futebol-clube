@@ -3,12 +3,12 @@ export type ServiceResponseMessage = {
 };
 
 export type ServiceResponseError = {
-  status: 'INVALID_DATA' | 'NOT_FOUND' | 'UNAUTHORIZED' | 'INTERNAL_ERROR';
+  status: 'INVALID_DATA' | 'NOT_FOUND' | 'UNAUTHORIZED' | 'INTERNAL_ERROR' | 'UNPROCESSABLE';
   data: ServiceResponseMessage;
 };
 
 export type ServiceResponseSuccess<T> = {
-  status: 'SUCCESSFUL';
+  status: 'SUCCESSFUL' | 'CREATED';
   data: T;
 };
 
