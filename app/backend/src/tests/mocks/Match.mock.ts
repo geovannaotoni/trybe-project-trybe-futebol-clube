@@ -63,8 +63,14 @@ const finishedMatches = [
   },
 ]
 
+const goalsToUpdate = {
+  homeTeamGoals: 2,
+  awayTeamGoals: 0,
+}
+
 export default {
   matches,
   matchesInProgress,
   finishedMatches,
+  goalsToUpdate,
 }
