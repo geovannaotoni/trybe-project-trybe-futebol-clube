@@ -7,6 +7,9 @@ import { app } from '../app';
 
 import SequelizeMatch from '../database/models/SequelizeMatch';
 import matchMock from './mocks/Match.mock';
+import JWT from '../utils/JWT';
+import Validations from '../middlewares/Validations';
+import { jwtPayload } from './mocks/User.mock';
 
 chai.use(chaiHttp);
 
@@ -40,5 +43,26 @@ describe('#Match', () => {
 
     expect(status).to.equal(200);
     expect(body).to.deep.equal(matchMock.finishedMatches);
+  });
+
+  it('A requisição para a rota PATCH /matches/:id/finish finaliza uma partida caso ela esteja em andamento', async function() {
+    sinon.stub(JWT, 'verify').resolves(jwtPayload);
+    // sinon.stub(Validations, 'validateToken').resolves();
+    sinon.stub(SequelizeMatch, 'update').resolves([1]);
+
+    const { status, body } = await chai.request(app).patch('/matches/1/finish').set('Authorization', 'genericToken');;
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal({ message: 'Finished' });
+  });
+
+  it('A requisição para a rota PATCH /matches/:id/finish retorna uma mensagem de erro caso a partida não seja atualizada', async function() {
+    sinon.stub(JWT, 'verify').resolves(jwtPayload);
+    sinon.stub(SequelizeMatch, 'update').resolves([0]);
+
+    const { status, body } = await chai.request(app).patch('/matches/2/finish').set('Authorization', 'genericToken');;
+
+    expect(status).to.equal(400);
+    expect(body).to.deep.equal({ message: 'Match not updated' });
   });
 });
