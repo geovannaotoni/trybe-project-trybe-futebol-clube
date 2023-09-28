@@ -16,22 +16,28 @@ export default class LeaderboardCalculate {
   constructor(
     team: ITeam,
     allFinishedMatches: IMatch[],
+    type: 'home' | 'away',
   ) {
     this.name = team.teamName;
-    this.getAllGamesPlayed(team, allFinishedMatches);
+    this.getAllGamesPlayed(team, allFinishedMatches, type);
     this.getTotalPoints();
-    this.getGoalsData(team, allFinishedMatches);
+    this.getGoalsData(team, allFinishedMatches, type);
     this.getEfficiency();
   }
 
-  private getAllGamesPlayed(team: ITeam, allFinishedMatches: IMatch[]): void {
-    const gamesPlayed = allFinishedMatches.filter((match) => match.homeTeamId === team.id);
+  private getAllGamesPlayed(team: ITeam, allFinishedMatches: IMatch[], type: 'home' | 'away'):
+  void {
+    const gamesPlayed = allFinishedMatches.filter((match) => match[`${type}TeamId`] === team.id);
     this.totalGames = gamesPlayed.length;
-    const gamesVictories = gamesPlayed.filter((match) => match.homeTeamGoals > match.awayTeamGoals);
+    const opponent = type === 'home' ? 'away' : 'home';
+    const gamesVictories = gamesPlayed
+      .filter((match) => match[`${type}TeamGoals`] > match[`${opponent}TeamGoals`]);
     this.totalVictories = gamesVictories.length;
-    const gamesLosses = gamesPlayed.filter((match) => match.homeTeamGoals < match.awayTeamGoals);
+    const gamesLosses = gamesPlayed
+      .filter((match) => match[`${type}TeamGoals`] < match[`${opponent}TeamGoals`]);
     this.totalLosses = gamesLosses.length;
-    const gamesDraws = gamesPlayed.filter((match) => match.homeTeamGoals === match.awayTeamGoals);
+    const gamesDraws = gamesPlayed
+      .filter((match) => match[`${type}TeamGoals`] === match[`${opponent}TeamGoals`]);
     this.totalDraws = gamesDraws.length;
   }
 
@@ -39,10 +45,11 @@ export default class LeaderboardCalculate {
     this.totalPoints = this.totalVictories * 3 + this.totalDraws;
   }
 
-  private getGoalsData(team: ITeam, allFinishedMatches: IMatch[]) {
-    const gamesPlayed = allFinishedMatches.filter((match) => match.homeTeamId === team.id);
-    this.goalsFavor = gamesPlayed.reduce((acc, match) => acc + match.homeTeamGoals, 0);
-    this.goalsOwn = gamesPlayed.reduce((acc, match) => acc + match.awayTeamGoals, 0);
+  private getGoalsData(team: ITeam, allFinishedMatches: IMatch[], type: 'home' | 'away') {
+    const gamesPlayed = allFinishedMatches.filter((match) => match[`${type}TeamId`] === team.id);
+    this.goalsFavor = gamesPlayed.reduce((acc, match) => acc + match[`${type}TeamGoals`], 0);
+    const opponent = type === 'home' ? 'away' : 'home';
+    this.goalsOwn = gamesPlayed.reduce((acc, match) => acc + match[`${opponent}TeamGoals`], 0);
     this.goalsBalance = this.goalsFavor - this.goalsOwn;
   }
 

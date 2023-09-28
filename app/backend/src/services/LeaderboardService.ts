@@ -10,11 +10,11 @@ export default class LeaderboardService {
     private matchModel = new MatchModel(),
   ) {}
 
-  public async getAllLeaderboardHome(): Promise<ServiceResponse<ILeaderboard[]>> {
+  public async getAllLeaderboard(type: 'home' | 'away'): Promise<ServiceResponse<ILeaderboard[]>> {
     const allTeams = await this.teamModel.findAll();
     const allFinishedMatches = await this.matchModel.findAllByProgress(false);
     const data = allTeams
-      .map((team) => new LeaderboardCalculate(team, allFinishedMatches))
+      .map((team) => new LeaderboardCalculate(team, allFinishedMatches, type))
       .sort((a, b) => {
         if (b.totalPoints !== a.totalPoints) {
           return b.totalPoints - a.totalPoints;
