@@ -68,9 +68,34 @@ const goalsToUpdate = {
   awayTeamGoals: 0,
 }
 
+const matchToCreate = {
+  "homeTeamId": 16, 
+  "awayTeamId": 8, 
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2
+}
+
+const invalidMatchToCreate = {
+  "homeTeamId": 16, 
+  "awayTeamId": 8, 
+  "homeTeamGoals": 2,
+}
+
+const createdMatch = {
+  "id": 1,
+  "homeTeamId": 16,
+  "homeTeamGoals": 2,
+  "awayTeamId": 8,
+  "awayTeamGoals": 2,
+  "inProgress": true
+}
+
 export default {
   matches,
   matchesInProgress,
   finishedMatches,
   goalsToUpdate,
+  matchToCreate,
+  createdMatch,
+  invalidMatchToCreate,
 }

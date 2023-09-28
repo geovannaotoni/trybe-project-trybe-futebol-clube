@@ -7,7 +7,7 @@ import { app } from '../app';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 
 import { Response } from 'superagent';
-import { teams } from './mocks/Team.mocks';
+import teamMock from './mocks/Team.mocks';
 
 chai.use(chaiHttp);
 
@@ -17,21 +17,21 @@ describe('#Teams', () => {
   afterEach(sinon.restore);
 
   it('A requisição para a rota GET /teams retorna todos os times', async function() {
-    sinon.stub(SequelizeTeam, 'findAll').resolves(teams.map((team) => SequelizeTeam.build(team)));
+    sinon.stub(SequelizeTeam, 'findAll').resolves(teamMock.teams.map((team) => SequelizeTeam.build(team)));
 
     const { status, body } = await chai.request(app).get('/teams');
 
     expect(status).to.equal(200);
-    expect(body).to.deep.equal(teams);
+    expect(body).to.deep.equal(teamMock.teams);
   });
 
   it('A requisição para a rota GET /teams/:id retorna o time com id correto', async function() {
-    sinon.stub(SequelizeTeam, 'findByPk').resolves(SequelizeTeam.build(teams[0]));
+    sinon.stub(SequelizeTeam, 'findByPk').resolves(SequelizeTeam.build(teamMock.teams[0]));
 
     const { status, body } = await chai.request(app).get('/teams/1');
 
     expect(status).to.equal(200);
-    expect(body).to.deep.equal(teams[0]);
+    expect(body).to.deep.equal(teamMock.teams[0]);
   });
 
   it('A requisição para a rota GET /teams/:id retorna uma mensagem de erro se não encontrar o time', async function() {

@@ -13,6 +13,6 @@ const teams = [
   },
 ]
 
-export {
+export default {
   teams,
 }
