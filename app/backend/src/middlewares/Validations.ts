@@ -34,6 +34,18 @@ class Validations {
 
     next();
   }
+
+  static validateUpdateGoalsMatch(req: Request, res: Response, next: NextFunction):
+  Response | void {
+    const goalsMatch = req.body;
+    const requiredKeys = ['homeTeamGoals', 'awayTeamGoals'];
+    const notFoundKey = requiredKeys.find((key) => !(key in goalsMatch));
+    if (notFoundKey) {
+      return res.status(400).json({ message: `${notFoundKey} is required` });
+    }
+
+    next();
+  }
 }
 
 export default Validations;

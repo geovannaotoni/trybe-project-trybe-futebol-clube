@@ -24,4 +24,11 @@ export default class MatchService {
     if (!updatedMatch) return { status: 'INVALID_DATA', data: { message: 'Match not updated' } };
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
   }
+
+  public async updateGoalsMatch(id:number, homeTeamGoals: number, awayTeamGoals: number):
+  Promise<ServiceResponse<ServiceResponseMessage>> {
+    const updatedMatch = await this.matchModel.updateGoals(id, homeTeamGoals, awayTeamGoals);
+    if (!updatedMatch) return { status: 'INVALID_DATA', data: { message: 'Match not updated' } };
+    return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
+  }
 }
