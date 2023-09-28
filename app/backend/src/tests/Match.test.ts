@@ -58,6 +58,13 @@ describe('#Match', () => {
     expect(body).to.deep.equal({ message: 'Finished' });
   });
 
+  it('A requisição para a rota PATCH /matches/:id/finish retorna uma mensagem de erro caso não seja enviado um token no headers', async function() {
+    const { status, body } = await chai.request(app).patch('/matches/2/finish');
+
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Token not found' });
+  });
+
   it('A requisição para a rota PATCH /matches/:id/finish retorna uma mensagem de erro caso a partida não seja atualizada', async function() {
     sinon.stub(JWT, 'verify').resolves(jwtPayload);
     sinon.stub(SequelizeMatch, 'update').resolves([0]);
@@ -66,6 +73,15 @@ describe('#Match', () => {
 
     expect(status).to.equal(400);
     expect(body).to.deep.equal({ message: 'Match not updated' });
+  });
+
+  it('A requisição para a rota PATCH /matches/:id retorna uma mensagem de erro se os dados do corpo da requisição estiverem incompletos', async function() {
+    sinon.stub(JWT, 'verify').resolves(jwtPayload);
+
+    const { status, body } = await chai.request(app).patch('/matches/1').set('Authorization', 'genericToken').send(matchMock.invalidGoalsToUpdate);
+
+    expect(status).to.equal(400);
+    expect(body).to.deep.equal({ message: 'awayTeamGoals is required' });
   });
 
   it('A requisição para a rota PATCH /matches/:id atualiza os gols dos times', async function() {

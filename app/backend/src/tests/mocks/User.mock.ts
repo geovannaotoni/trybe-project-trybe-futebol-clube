@@ -13,6 +13,11 @@ const validLoginBody = {
   password: 'secret_admin',
 }
 
+const invalidLoginBody = {
+  email: 'admin@admin.com',
+  password: 'secret_adminn',
+}
+
 const registeredUser = {
   username: 'Admin',
   role: 'admin',
@@ -29,6 +34,7 @@ export {
   invalidEmailLoginBody,
   invalidPasswordLoginBody,
   validLoginBody,
+  invalidLoginBody,
   registeredUser,
   jwtPayload,
 }

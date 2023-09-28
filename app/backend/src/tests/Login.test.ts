@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 
-import { invalidEmailLoginBody, invalidPasswordLoginBody, jwtPayload, registeredUser, validLoginBody } from './mocks/User.mock';
+import { invalidEmailLoginBody, invalidLoginBody, invalidPasswordLoginBody, jwtPayload, registeredUser, validLoginBody } from './mocks/User.mock';
 import SequelizeUser from '../database/models/SequelizeUser';
 import JWT from '../utils/JWT';
 
@@ -51,6 +51,15 @@ describe('#Login', () => {
     sinon.stub(SequelizeUser, 'findOne').resolves(null);
 
     const { status, body } = await chai.request(app).post('/login').send(validLoginBody);
+
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Invalid email or password' });
+  });
+
+  it('A requisição para a rota POST /login retorna uma mensagem de erro se a senha enviada não corresponder a senha salva no banco', async function() {
+    sinon.stub(SequelizeUser, 'findOne').resolves(SequelizeUser.build(registeredUser));
+
+    const { status, body } = await chai.request(app).post('/login').send(invalidLoginBody);
 
     expect(status).to.equal(401);
     expect(body).to.deep.equal({ message: 'Invalid email or password' });
