@@ -1,6 +1,10 @@
+export type ServiceResponseMessage = {
+  message: string;
+};
+
 export type ServiceResponseError = {
   status: 'INVALID_DATA' | 'NOT_FOUND' | 'UNAUTHORIZED' | 'INTERNAL_ERROR';
-  data: { message: string };
+  data: ServiceResponseMessage;
 };
 
 export type ServiceResponseSuccess<T> = {

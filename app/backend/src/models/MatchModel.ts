@@ -25,4 +25,12 @@ export default class MatchModel implements IMatchModel {
     });
     return dbData.map((match) => match.toJSON());
   }
+
+  public async finish(id: number): Promise<number> {
+    const [updatedMatch] = await this.model.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+    return updatedMatch;
+  }
 }
