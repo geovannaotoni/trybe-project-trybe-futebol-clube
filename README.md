@@ -16,7 +16,7 @@ Para executar o projeto, você deve ter o Docker instalado em sua máquina. Em s
 - O back-end estará disponível na porta 3001 e o front-end na porta 3000.
 
 <img src="./partidas.png" alt="página de partidas"/>
-<img src="./classificação-geral.png" alt="página de classificação/>
+<img src="./classificação-geral.png" alt="página de classificação"/>
 
 ## :mag: Executando os testes:
 Utilize o comando `npm test` na pasta `app/back-end`. Esse comando irá executar os testes de integração e  verificará se os comportamentos esperados estão sendo corretamente implementados na API. Para verificar a cobertura dos testes, utilize: `npm run test:coverage`.
