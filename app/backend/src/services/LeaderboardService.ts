@@ -10,24 +10,21 @@ export default class LeaderboardService {
     private matchModel = new MatchModel(),
   ) {}
 
-  public async getAllLeaderboard(type: 'home' | 'away'): Promise<ServiceResponse<ILeaderboard[]>> {
+  public async getLeaderboardByType(type: 'home' | 'away'):
+  Promise<ServiceResponse<ILeaderboard[]>> {
     const allTeams = await this.teamModel.findAll();
     const allFinishedMatches = await this.matchModel.findAllByProgress(false);
-    const data = allTeams
-      .map((team) => new LeaderboardCalculate(team, allFinishedMatches, type))
-      .sort((a, b) => {
-        if (b.totalPoints !== a.totalPoints) {
-          return b.totalPoints - a.totalPoints;
-        }
-        if (b.totalVictories !== a.totalVictories) {
-          return b.totalVictories - a.totalVictories;
-        }
-        if (b.goalsBalance !== a.goalsBalance) {
-          return b.goalsBalance - a.goalsBalance;
-        }
-        return b.goalsFavor - a.goalsFavor;
-      });
+    const unsortedData = allTeams
+      .map((team) => new LeaderboardCalculate(team, allFinishedMatches, type));
+    const data = LeaderboardCalculate.sortLeaderboards(unsortedData);
+    return { status: 'SUCCESSFUL', data };
+  }
 
+  public async getAllLeaderboard(): Promise<ServiceResponse<ILeaderboard[]>> {
+    const homeData = (await this.getLeaderboardByType('home')).data as ILeaderboard[];
+    const awayData = (await this.getLeaderboardByType('away')).data as ILeaderboard[];
+    const unsortedData = LeaderboardCalculate.getAllLeaderboard(homeData, awayData);
+    const data = LeaderboardCalculate.sortLeaderboards(unsortedData);
     return { status: 'SUCCESSFUL', data };
   }
 }
